@@ -27,6 +27,7 @@ public class MainFrame extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 gameScene.endGameLoop();
+                gameScene.saveData();
             }
             
         });

@@ -15,7 +15,7 @@ import com.wordbank.GUI.Texts;
 
 public class GameGraphics {
     private final LetterMatrix letterMatrix;   
-    private int matrixDimension;
+    private final int matrixDimension = 12;
     //Mouse position variables
     private boolean initialPress;
     private Point initialPos;
@@ -29,9 +29,8 @@ public class GameGraphics {
         finalPos = null;
     }
 
-    public void setMatrixDimension(int dimension) {
-        letterMatrix.generateMatrix(dimension);
-        matrixDimension = dimension;
+    public void saveData() {
+        letterMatrix.saveData();
     }
 
     public void renderBackgroundImage(Graphics2D graphic, String filepath) {
@@ -243,7 +242,7 @@ public class GameGraphics {
                 loop = false;
             }
 
-            LetterMatrix.Letter letter = letterMatrix.getLetterAt(Xpos, Ypos);
+            Letter letter = letterMatrix.getLetterAt(Xpos, Ypos);
             if (letter != null) {
                 word += letter.word;
             }

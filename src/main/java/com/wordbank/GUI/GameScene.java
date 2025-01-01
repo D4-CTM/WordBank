@@ -53,7 +53,6 @@ public class GameScene extends javax.swing.JPanel implements Runnable {
             mainFrame.showMenu();
         });
 
-        gameGraphics.setMatrixDimension(12);
         add(returnBTN);
     }
 
@@ -118,6 +117,10 @@ public class GameScene extends javax.swing.JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         update((Graphics2D) g);
+    }
+
+    public void saveData() {
+        gameGraphics.saveData();
     }
 
 }

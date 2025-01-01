@@ -1,7 +1,9 @@
 package com.wordbank.Logic;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Random;
@@ -12,13 +14,49 @@ public class LetterMatrix {
     private Letter[][] letterMatrix;
     private final YamlReader yaml;
     //LETTERS MATRIX VARIABLES
+
     public LetterMatrix() {
-        yaml = new YamlReader("./src/main/resources/SaveData.yaml", "./src/main/resources/words.yaml");
+        yaml = new YamlReader("./src/main/resources/SaveData.yaml", "./src/main/resources/WordList.txt");
         matrixFilePath = "./src/main/resources/letterMatrix.bin";
-        letterMatrix = null;
+        Object matrix = readMatrixFile();
+        if (matrix != null)  {
+            letterMatrix = (Letter[][]) matrix;
+        } else {
+            System.out.println("it was null");
+            createNewMatrix();
+        }
     }
 
-    public void generateMatrix(int dimension) {
+    public Object readMatrixFile() {
+        if (!new File(matrixFilePath).exists()) {
+            return null;
+        }
+
+        try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(matrixFilePath))) {
+            return input.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();            
+        }
+
+        return null;
+    } 
+
+    public void saveData() {
+        try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(matrixFilePath))) {
+            output.writeObject(letterMatrix);
+            yaml.saveYaml();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void createNewMatrix() {
+        final int dimension = 12;
+        String[] words = null;
+        do {
+            words = yaml.getWords();
+        } while (words == null);
+
         letterMatrix = new Letter[dimension][dimension];
         for (int i = 0; i < dimension; i++) {
 
@@ -27,6 +65,9 @@ public class LetterMatrix {
             }
 
         }
+
+        yaml.updateTurn();
+        yaml.updateWords(words);
     }
 
     public Letter getLetterAt(int x, int y) {
@@ -41,20 +82,19 @@ public class LetterMatrix {
         return (char) new Random().nextInt('A', 'Z');
     }
 
-    public void saveLetterMatrix() {
-        try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(matrixFilePath))){
-            output.writeObject(letterMatrix);
-            output.close();
-        } catch (IOException e) {}
-    }
+}
+class Letter implements Serializable {
+    private static final long serialVersionUID = 1L;
+    //If this space is use for another word
+    public boolean spaceTaken;
+    //If this letter was found by the player
+    public boolean found;
+    //The letter itself
+    public char word;
 
-    public class Letter implements Serializable{
-        public boolean found;
-        public char word;
-
-        Letter(final char _word) {
-            found = false;
-            word = _word;
-        }
+    Letter(final char _word) {
+        spaceTaken = false;
+        found = false;
+        word = _word;
     }
 }
