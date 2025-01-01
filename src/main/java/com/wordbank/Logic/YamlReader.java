@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +20,17 @@ public class YamlReader {
     private final ConfigurationYaml config;
 
     public YamlReader(String configFilepath, String _wordsFilepath) {
+        createPath(configFilepath);
+        createPath(_wordsFilepath);
+
         config = new ConfigurationYaml(configFilepath);
         wordsFilepath = _wordsFilepath;
+    }
+
+    private void createPath(String path) {
+        Path filepath = Path.of(path);
+        File root = filepath.getParent().toFile();
+        root.mkdirs();
     }
 
     public void saveYaml() {

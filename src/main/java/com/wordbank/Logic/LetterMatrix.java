@@ -16,8 +16,8 @@ public class LetterMatrix {
     //LETTERS MATRIX VARIABLES
 
     public LetterMatrix() {
-        yaml = new YamlReader("./src/main/resources/SaveData.yaml", "./src/main/resources/WordList.txt");
-        matrixFilePath = "./src/main/resources/letterMatrix.bin";
+        yaml = new YamlReader("./SaveData/UserData.yaml", "./src/main/resources/WordList.txt");
+        matrixFilePath = "./SaveData/letterMatrix.bin";
         Object matrix = readMatrixFile();
         if (matrix != null)  {
             letterMatrix = (Letter[][]) matrix;
