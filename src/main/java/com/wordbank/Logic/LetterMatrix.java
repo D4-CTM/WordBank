@@ -6,7 +6,11 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
+import java.awt.Point;
 
 public class LetterMatrix {
     //LETTERS MATRIX VARIABLES
@@ -22,7 +26,6 @@ public class LetterMatrix {
         if (matrix != null)  {
             letterMatrix = (Letter[][]) matrix;
         } else {
-            System.out.println("it was null");
             createNewMatrix();
         }
     }
@@ -50,11 +53,101 @@ public class LetterMatrix {
         }
     }
     
+    private int getRandomNumber(int limit) {
+        return new Random().nextInt(Integer.MAX_VALUE) % limit;
+    }
+    
+    private void insertWord(final String word, final int dimension) {
+        final int x = getRandomNumber(dimension);
+        final int y = getRandomNumber(dimension);
+        final int length = word.length() - 1;
+
+        final int direction = getRandomNumber(4);
+        Queue<Point> points = new LinkedList<Point>();
+        switch (direction) {
+            //left ->
+            case 0 -> {
+                if (x + length >= dimension) {
+                    insertWord(word, dimension);
+                    return ;
+                } 
+
+                for (int i = 0; i <= length; i++) {
+                    if (!getLetterAt(x + i, y).spaceTaken || getLetterAt(x + i, y).word == word.charAt(i)) {
+                        points.add(new Point(x + i, y));
+                    } else {
+                        insertWord(word, dimension);
+                        return;
+                    }
+                }
+            }
+            //right <-
+            case 1 -> {
+                if (x - length < 0) {
+                    insertWord(word, dimension);
+                    return ;
+                }
+
+                for (int i = 0; i <= length; i++) {
+                    if (!getLetterAt(x - i, y).spaceTaken || getLetterAt(x - i, y).word == word.charAt(i)) {
+                        points.add(new Point(x - i, y));
+                    } else {
+                        insertWord(word, dimension);
+                        return;
+                    }
+                }
+
+            }
+            //up /\
+            case 2 -> {
+                if (y + length >= dimension) {
+                    insertWord(word, dimension);
+                    return ;
+                } 
+
+                for (int i = 0; i <= length; i++) {
+                    if (!getLetterAt(x, y + i).spaceTaken || getLetterAt(x, y + i).word == word.charAt(i)) {
+                        points.add(new Point(x, y + i));
+                    } else {
+                        insertWord(word, dimension);
+                        return;
+                    }
+                }
+            }
+            //down \/
+            case 3 -> {
+                if (y - length < 0) {
+                    insertWord(word, dimension);
+                    return ;
+                } 
+
+                for (int i = 0; i <= length; i++) {
+                    if (!getLetterAt(x, y - i).spaceTaken || getLetterAt(x, y - i).word == word.charAt(i)) {
+                        points.add(new Point(x, y - i));
+                    } else {
+                        insertWord(word, dimension);
+                        return;
+                    }
+                }
+            }
+        }
+
+        int charPos = 0;
+        while (!points.isEmpty()) {
+            Point point = points.poll();
+            letterMatrix[point.x][point.y].word = word.charAt(charPos);
+            letterMatrix[point.x][point.y].spaceTaken = true;
+            charPos ++;
+        }
+
+        System.gc();
+    }
+
     public void createNewMatrix() {
         final int dimension = 12;
         String[] words = null;
         do {
-            words = yaml.getWords();
+            words = yaml.generateWords();
         } while (words == null);
 
         letterMatrix = new Letter[dimension][dimension];
@@ -66,8 +159,17 @@ public class LetterMatrix {
 
         }
 
+        for (final String word : words) {
+            insertWord(word, dimension);
+            System.gc();
+        }
+
         yaml.updateTurn();
         yaml.updateWords(words);
+    }
+
+    public ArrayList<String> getWords() {
+        return yaml.getWords();
     }
 
     public Letter getLetterAt(int x, int y) {

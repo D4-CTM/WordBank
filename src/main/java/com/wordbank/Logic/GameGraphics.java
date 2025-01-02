@@ -8,6 +8,8 @@ import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 
@@ -16,6 +18,7 @@ import com.wordbank.GUI.Texts;
 public class GameGraphics {
     private final LetterMatrix letterMatrix;   
     private final int matrixDimension = 12;
+    private final LinkedList<WordCoords> wordCoords;
     //Mouse position variables
     private boolean initialPress;
     private Point initialPos;
@@ -24,6 +27,7 @@ public class GameGraphics {
 
     public GameGraphics() {
         letterMatrix = new LetterMatrix();
+        wordCoords = new LinkedList<>();
         initialPress = true;
         initialPos = null;
         finalPos = null;
@@ -230,22 +234,24 @@ public class GameGraphics {
         graphic.setTransform(originalTranform);
     }
 
-    private String getWord() {
-        String word = "";
-        if (initialPress) return word;
+    private WordCoords getWord() {
+        WordCoords wc = new WordCoords();        
+        if (initialPress) return wc;
 
         boolean loop = true;
-        int Xpos = initialPos.x;
-        int Ypos = initialPos.y;
+        int Xpos = wc.initialCoords.x = initialPos.x;
+        int Ypos = wc.initialCoords.y = initialPos.y;
         while (loop) {
             if (Xpos == finalPos.x && Ypos == finalPos.y) {
                 loop = false;
             }
-
+            
             Letter letter = letterMatrix.getLetterAt(Xpos, Ypos);
             if (letter != null) {
-                word += letter.word;
-            }
+                wc.word += letter.word;
+                wc.finalCoords.x = Xpos;
+                wc.finalCoords.y = Ypos;
+            }            
 
             if (Xpos > finalPos.x) {
                 Xpos--;
@@ -258,13 +264,14 @@ public class GameGraphics {
             } else if (Ypos < finalPos.y) {
                 Ypos++;
             }
+
         }
 
-        return word;
+        return wc;
     }
 
     private void showWord(Graphics2D graphic) {
-        String word = getWord();
+        String word = getWord().word;
         if (word.isEmpty()) return ;
         int wordGraphicSize = (word.length() * 25)/2;
         int x = (calculateOffset() + (matrixDimension * 50)/2) - wordGraphicSize;
@@ -305,8 +312,38 @@ public class GameGraphics {
     }
 
     public void checkWord() {
-        System.out.println(getWord());
+        ArrayList<String> words = letterMatrix.getWords();
+        WordCoords wc = getWord();
+        for (final String word : words) {
+            if (!wc.compareWords(word)) continue;
+            wordCoords.add(wc);
+            break;
+        }
         initialPress = true;
     }
 
+    private class WordCoords {
+        public Point initialCoords;
+        public Point finalCoords;
+        public String word;
+
+        public WordCoords() {
+            initialCoords = new Point();
+            finalCoords = new Point();
+            word = "";
+        }
+
+        private boolean reverseCompare(final String word1, final String word2) {
+            if (word1.length() != word2.length()) return false;
+            for (int i1 = 0, i2 = word2.length() - 1; i1 < word1.length(); i1++, i2--) {
+                if (word1.charAt(i1) != word2.charAt(i2)) return false;
+            }
+
+            return true;
+        }
+
+        protected boolean compareWords(String _word) {
+            return word.equals(_word) || reverseCompare(word, _word);
+        } 
+    }
 }

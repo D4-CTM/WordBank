@@ -37,7 +37,7 @@ public class YamlReader {
         config.createSaveFile();
     }
 
-    public String[] getWords() {
+    public String[] generateWords() {
         if (config.turn == 0) {
             String[] words = {
                 "JENNIFER",
@@ -70,6 +70,10 @@ public class YamlReader {
         }
 
         return words;
+    }
+
+    public ArrayList<String> getWords() {
+        return config.words;
     }
 
     public void updateTurn() {
@@ -118,7 +122,6 @@ public class YamlReader {
                 words = (ArrayList<String>) map.get("Words");
                 turn = (int) map.get("Turn");
             } catch (Exception e) {
-                System.out.println("Error reading the yaml");
                 e.printStackTrace();
             }
         }
