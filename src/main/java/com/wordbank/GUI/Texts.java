@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 public class Texts {
 
@@ -38,6 +39,17 @@ public class Texts {
     public static Color BORDER_COLOR = Color.decode("#faf5ef");
     public static Color BUTTON_COLOR = Color.decode("#eba8a0");
     public static Color TEXT_COLOR = Color.decode("#ff6961");
-
-
+    public static Color RANDOM_COLOR() {
+        final Random rng = new Random();
+        final int color = rng.nextInt(Integer.MAX_VALUE) % 5;
+        System.out.println(color);
+        switch (color) {
+            case 0: return Color.decode("#63B4D1"); // aero
+            case 1: return Color.decode("#3EC300"); // kelly green
+            case 2: return Color.decode("#FF1D15"); // red
+            case 3: return Color.decode("#FFFC31"); // yellow
+            case 4: return Color.decode("#F9A620"); // orange
+            default: return Texts.BORDER_COLOR;
+        }
+    }
 }

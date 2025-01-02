@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
+import java.awt.Color;
 import java.awt.Point;
 
 public class LetterMatrixManager {
@@ -93,6 +94,9 @@ public class LetterMatrixManager {
         return letterMatrix.getWordCoords();
     }
 
+    public boolean isJumbleComplete() {
+        return letterMatrix.isJumbleComplete();
+    }
 }
 class LetterMatrix implements Serializable {
     public static final short MATRIX_DIMENSION = 12;
@@ -293,6 +297,10 @@ class LetterMatrix implements Serializable {
         return (char) new Random().nextInt('A', 'Z');
     }
 
+    public boolean isJumbleComplete() {
+        return wordCoords.size() == 10;
+    }
+
 }
 class Letter implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -312,6 +320,7 @@ class Letter implements Serializable {
 class WordCoord implements Serializable{
     public Point initialCoords;
     public Point finalCoords;
+    public Color background;
     public String word;
 
     public WordCoord() {

@@ -9,9 +9,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import javax.imageio.ImageIO;
-
 import com.wordbank.GUI.Texts;
 
 public class GameGraphics {
@@ -21,10 +19,11 @@ public class GameGraphics {
     private boolean initialPress;
     private Point initialPos;
     private Point finalPos;
-    //Mouse position variables
+    private Color fillColor;
 
     public GameGraphics() {
         letterMatrix = new LetterMatrixManager();
+        fillColor = Texts.RANDOM_COLOR();
         initialPress = true;
         initialPos = null;
         finalPos = null;
@@ -178,10 +177,10 @@ public class GameGraphics {
         }
     }
 
-    private void showSelectedLetters(Graphics2D graphic, Point initialPointer, Point finalPointer) {
+    private void showSelectedLetters(Graphics2D graphic, Point initialPointer, Point finalPointer, Color bg) {
         AffineTransform originalTranform = graphic.getTransform();
-        graphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
-        graphic.setColor(Texts.BORDER_COLOR);
+        graphic.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+        graphic.setColor(bg == null ? fillColor : bg);
 
         final int deltaX = finalPointer.x - initialPointer.x;
         final int deltaY = finalPointer.y - initialPointer.y;
@@ -305,12 +304,12 @@ public class GameGraphics {
         }
 
         showWord(graphic);
-        showSelectedLetters(graphic, initialPos, finalPos);
+        showSelectedLetters(graphic, initialPos, finalPos, null);
     }
 
     public void showFoundWords(Graphics2D graphic) {
         for (final WordCoord wordCoord : letterMatrix.getWordCoords()) {
-            showSelectedLetters(graphic, wordCoord.initialCoords, wordCoord.finalCoords);
+            showSelectedLetters(graphic, wordCoord.initialCoords, wordCoord.finalCoords, wordCoord.background);
         }
     }
 
@@ -320,11 +319,17 @@ public class GameGraphics {
         for (final String word : words) {
             if (!wc.compareWords(word)) continue;
             wc.word = word;
+            wc.background = fillColor;
             letterMatrix.addWordCoord(wc);
 
             break;
         }
+        fillColor = Texts.RANDOM_COLOR();
         initialPress = true;
+    }
+
+    public boolean isJumbleComplete() {
+        return letterMatrix.isJumbleComplete();
     }
 
 }
