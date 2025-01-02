@@ -10,7 +10,6 @@ public class Main {
 
 /*
  * TO DO:
- *  - add the diagonal words
  *  - make the ovals permanent when a word is correct (as well as the different colors)
  *  - implement the list of words box
  */

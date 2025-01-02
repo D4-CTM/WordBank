@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -86,6 +87,10 @@ public class LetterMatrixManager {
 
     public Letter getLetterAt(int x, int y) {
         return letterMatrix.getLetterAt(x, y);
+    }
+
+    public Collection<WordCoord> getWordCoords() {
+        return letterMatrix.getWordCoords();
     }
 
 }
@@ -276,6 +281,10 @@ class LetterMatrix implements Serializable {
         return wordCoords.containsKey(word);
     }
     
+    public Collection<WordCoord> getWordCoords() {
+        return wordCoords.values();
+    }
+
     private int getRandomNumber(int limit) {
         return new Random().nextInt(Integer.MAX_VALUE) % limit;
     }
@@ -300,7 +309,7 @@ class Letter implements Serializable {
         word = _word;
     }
 }
-class WordCoord {
+class WordCoord implements Serializable{
     public Point initialCoords;
     public Point finalCoords;
     public String word;

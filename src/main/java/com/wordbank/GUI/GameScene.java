@@ -101,6 +101,7 @@ public class GameScene extends javax.swing.JPanel implements Runnable {
             mouseReleased = false;
             mousePressed = false;
         }
+        gameGraphics.showFoundWords(graphics);
 
     }
 

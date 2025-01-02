@@ -308,11 +308,18 @@ public class GameGraphics {
         showSelectedLetters(graphic, initialPos, finalPos);
     }
 
+    public void showFoundWords(Graphics2D graphic) {
+        for (final WordCoord wordCoord : letterMatrix.getWordCoords()) {
+            showSelectedLetters(graphic, wordCoord.initialCoords, wordCoord.finalCoords);
+        }
+    }
+
     public void checkWord() {
         ArrayList<String> words = letterMatrix.getWords();
         WordCoord wc = getWord();
         for (final String word : words) {
             if (!wc.compareWords(word)) continue;
+            wc.word = word;
             letterMatrix.addWordCoord(wc);
 
             break;
