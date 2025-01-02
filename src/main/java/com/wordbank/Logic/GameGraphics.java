@@ -9,16 +9,14 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 
 import com.wordbank.GUI.Texts;
 
 public class GameGraphics {
-    private final LetterMatrix letterMatrix;   
+    private final LetterMatrixManager letterMatrix;   
     private final int matrixDimension = 12;
-    private final LinkedList<WordCoords> wordCoords;
     //Mouse position variables
     private boolean initialPress;
     private Point initialPos;
@@ -26,8 +24,7 @@ public class GameGraphics {
     //Mouse position variables
 
     public GameGraphics() {
-        letterMatrix = new LetterMatrix();
-        wordCoords = new LinkedList<>();
+        letterMatrix = new LetterMatrixManager();
         initialPress = true;
         initialPos = null;
         finalPos = null;
@@ -234,8 +231,8 @@ public class GameGraphics {
         graphic.setTransform(originalTranform);
     }
 
-    private WordCoords getWord() {
-        WordCoords wc = new WordCoords();        
+    private WordCoord getWord() {
+        WordCoord wc = new WordCoord();        
         if (initialPress) return wc;
 
         boolean loop = true;
@@ -313,37 +310,14 @@ public class GameGraphics {
 
     public void checkWord() {
         ArrayList<String> words = letterMatrix.getWords();
-        WordCoords wc = getWord();
+        WordCoord wc = getWord();
         for (final String word : words) {
             if (!wc.compareWords(word)) continue;
-            wordCoords.add(wc);
+            letterMatrix.addWordCoord(wc);
+
             break;
         }
         initialPress = true;
     }
 
-    private class WordCoords {
-        public Point initialCoords;
-        public Point finalCoords;
-        public String word;
-
-        public WordCoords() {
-            initialCoords = new Point();
-            finalCoords = new Point();
-            word = "";
-        }
-
-        private boolean reverseCompare(final String word1, final String word2) {
-            if (word1.length() != word2.length()) return false;
-            for (int i1 = 0, i2 = word2.length() - 1; i1 < word1.length(); i1++, i2--) {
-                if (word1.charAt(i1) != word2.charAt(i2)) return false;
-            }
-
-            return true;
-        }
-
-        protected boolean compareWords(String _word) {
-            return word.equals(_word) || reverseCompare(word, _word);
-        } 
-    }
 }
