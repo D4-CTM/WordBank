@@ -1,0 +1,4 @@
+﻿Light_text: Bubbleboddy
+link: https://www.fontspace.com/bubbleboddy-font-f24700
+
+bold_text: Lobster

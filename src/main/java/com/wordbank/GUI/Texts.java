@@ -31,7 +31,8 @@ public class Texts {
     *   If you tried to use a custom font just remember:
     *       There has to be 2 types of fonts, one for the bolded text and one for the light text.
     */
-    public static Font NORMAL_LIGHT_FONT = readFont("./src/main/resources/font/Light_Text.ttf", 25f);
+    public static Font LITTLE_LIGHT_FONT = readFont("./src/main/resources/font/Light_Text.ttf", 35f);
+    public static Font NORMAL_LIGHT_FONT = readFont("./src/main/resources/font/Light_Text.ttf", 40f);
     public static Font LIGHT_FONT = readFont("./src/main/resources/font/Light_Text.ttf", 50f);
     public static Font BOLD_FONT = readFont("./src/main/resources/font/Bold_Text.ttf", 50f);
 
@@ -42,7 +43,6 @@ public class Texts {
     public static Color RANDOM_COLOR() {
         final Random rng = new Random();
         final int color = rng.nextInt(Integer.MAX_VALUE) % 5;
-        System.out.println(color);
         switch (color) {
             case 0: return Color.decode("#63B4D1"); // aero
             case 1: return Color.decode("#3EC300"); // kelly green

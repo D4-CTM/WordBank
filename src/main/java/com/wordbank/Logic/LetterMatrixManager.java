@@ -97,6 +97,14 @@ public class LetterMatrixManager {
     public boolean isJumbleComplete() {
         return letterMatrix.isJumbleComplete();
     }
+
+    public ArrayList<String> getWordsFound() {
+        ArrayList<String> wordsFound = new ArrayList<>();
+        for (final WordCoord word : letterMatrix.getWordCoords()) {
+            wordsFound.add(word.word);
+        }
+        return wordsFound;
+    }
 }
 class LetterMatrix implements Serializable {
     public static final short MATRIX_DIMENSION = 12;

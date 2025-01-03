@@ -32,7 +32,7 @@ public class GameGraphics {
     public void saveData() {
         letterMatrix.saveData();
     }
-
+    
     public void renderBackgroundImage(Graphics2D graphic, String filepath) {
         try {
             BufferedImage image = ImageIO.read(new java.io.File(filepath));
@@ -42,6 +42,39 @@ public class GameGraphics {
 
     private int calculateOffset() {
         return 100 + (((12 - matrixDimension)/2) * 50);
+    }
+
+    public void renderWordBox(Graphics2D graphic) {
+        graphic.setColor(new Color(0,0,0,200));
+        graphic.fillRect(50, 725, 700, 150);
+        renderWordsOnBox(graphic);
+    }
+
+    private void renderWordsOnBox(Graphics2D graphic) {
+        ArrayList<String> words = letterMatrix.getWords();
+        ArrayList<String> wordsFound = letterMatrix.getWordsFound();
+        
+        graphic.setFont(Texts.LITTLE_LIGHT_FONT);
+        final float x = 100;
+        final float y = 725;
+        float xOffset, yOffset;
+        for (int i = 0; i < words.size(); i++) {
+            String word = words.get(i);
+
+            if (i < 4) {
+                yOffset = y + (float) 39.5; 
+                xOffset = x + ((float) (i * 175)) - (word.length()/2);
+            } else if (i < 8) {
+                yOffset = y + (float) 89.5;
+                xOffset = x + ((float) ((i - 4) * 175)) - (word.length()/2);
+            } else {
+                yOffset = y + (float) 139.5;
+                xOffset = x + ((float) ((i - 8) * 350))  - (word.length()/2);
+            }
+
+            graphic.setColor(!wordsFound.contains(word) ? Texts.BORDER_COLOR : Texts.TEXT_COLOR);
+            graphic.drawString(word, xOffset, yOffset);
+        }
     }
 
     public void renderMatrixBackground(Graphics2D graphic) {
@@ -60,8 +93,7 @@ public class GameGraphics {
         for (int i = 0; i < matrixDimension; i++) {
 
             for (int j = 0; j < matrixDimension; j++) {
-                graphic.drawString(String.valueOf(letterMatrix.getLetterAt(i, j).word), offset + 5 +  (i * 50), offset + 45 + (j * 50));
-
+                graphic.drawString(String.valueOf(letterMatrix.getLetterAt(i, j).word), offset + 15 +  (i * 50), offset + 40 + (j * 50));
             }
 
         }
@@ -269,14 +301,16 @@ public class GameGraphics {
     private void showWord(Graphics2D graphic) {
         String word = getWord().word;
         if (word.isEmpty()) return ;
-        int wordGraphicSize = (word.length() * 25)/2;
+        int wordGraphicSize = (word.length() * 27)/2;
         int x = (calculateOffset() + (matrixDimension * 50)/2) - wordGraphicSize;
         graphic.setColor(Texts.BUTTON_COLOR);
-        graphic.fillOval(x - 25, 5, 50 + wordGraphicSize * 2, 50);
+        graphic.fillOval(x - 25, 25, 40 + wordGraphicSize * 2, 55);
 
         graphic.setColor(Texts.BORDER_COLOR);
-        graphic.setFont(Texts.LIGHT_FONT);        
-        graphic.drawString(word, x - 5, 50);
+        graphic.setFont(Texts.NORMAL_LIGHT_FONT);
+        for (int i = 0; i < word.length(); i++) {
+            graphic.drawString(String.valueOf(word.charAt(i)), x - 5 + (i * 27), 65);
+        }
     }
 
     public void renderSelectedTiles(Graphics2D graphic, Point mousePointer) {
@@ -330,6 +364,10 @@ public class GameGraphics {
 
     public boolean isJumbleComplete() {
         return letterMatrix.isJumbleComplete();
+    }
+
+    public void generateNewMatrix() {
+        letterMatrix.createNewMatrix();
     }
 
 }

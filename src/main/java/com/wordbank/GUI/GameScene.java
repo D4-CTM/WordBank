@@ -22,7 +22,7 @@ public class GameScene extends javax.swing.JPanel implements Runnable {
     private boolean mouseReleased;
     //GAME LOOP VARIABLES - CONSTANTS
     private final GameGraphics gameGraphics;
-    private final float NANOSECONDS = 1000000000;
+    private final long NANOSECONDS = 1000000000;
     private final float FPS;
     //CONSTANTS
 
@@ -46,8 +46,8 @@ public class GameScene extends javax.swing.JPanel implements Runnable {
             
         });
 
-        final JButton returnBTN = new JButton("exit");
-        returnBTN.setBounds(0,0, 100, 100);
+        final JButton returnBTN = new JButton();
+        returnBTN.setBounds(0,0, 200, 100);
 
         returnBTN.addActionListener((ActionEvent e) -> {
             mainFrame.showMenu();
@@ -103,12 +103,19 @@ public class GameScene extends javax.swing.JPanel implements Runnable {
         }
         gameGraphics.showFoundWords(graphics);
 
+        if (!gameGraphics.isJumbleComplete()) return;
+        System.out.println("MatrixCompleted");
+        try {
+            Thread.sleep(2000);
+            gameGraphics.generateNewMatrix();
+        } catch (Exception e) {}
     }
 
     private void update(Graphics2D graphics) {
-        gameGraphics.renderBackgroundImage(graphics, "./src/main/resources/images/lichi_bg.png");
+        gameGraphics.renderBackgroundImage(graphics, "./src/main/resources/images/bg.png");
         gameGraphics.renderMatrixBackground(graphics);
         gameGraphics.renderLetterMatrix(graphics);
+        gameGraphics.renderWordBox(graphics);
         eventHandler(graphics);
 
         graphics.dispose();

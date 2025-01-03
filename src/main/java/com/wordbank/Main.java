@@ -10,6 +10,5 @@ public class Main {
 
 /*
  * TO DO:
- *  - make the ovals permanent when a word is correct (as well as the different colors)
  *  - implement the list of words box
  */

@@ -53,7 +53,7 @@ public class MainFrame extends JFrame {
     public void showGame() {
         crdLayout.show(crdPnl, GAME_PNL);
         gameScene.startGame();
-    }   
+    }
     
     public void showMenu() {
         crdLayout.show(crdPnl, MENU_PNL);
