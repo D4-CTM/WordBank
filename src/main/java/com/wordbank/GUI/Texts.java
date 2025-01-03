@@ -31,7 +31,7 @@ public class Texts {
     *   If you tried to use a custom font just remember:
     *       There has to be 2 types of fonts, one for the bolded text and one for the light text.
     */
-    public static Font LITTLE_LIGHT_FONT = readFont("./src/main/resources/font/Light_Text.ttf", 35f);
+    public static Font LITTLE_LIGHT_FONT = readFont("./src/main/resources/font/Light_Text.ttf", 25f);
     public static Font NORMAL_LIGHT_FONT = readFont("./src/main/resources/font/Light_Text.ttf", 40f);
     public static Font LIGHT_FONT = readFont("./src/main/resources/font/Light_Text.ttf", 50f);
     public static Font BOLD_FONT = readFont("./src/main/resources/font/Bold_Text.ttf", 50f);

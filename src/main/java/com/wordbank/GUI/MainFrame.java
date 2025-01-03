@@ -19,7 +19,7 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Word bank");
+        setTitle("Word bonk");
         setResizable(false);
 
         addWindowListener(new WindowAdapter() {
