@@ -7,8 +7,3 @@ public class Main {
         new MainFrame().setVisible(true);
     }
 }
-
-/*
- * TO DO:
- *  - implement the list of words box
- */

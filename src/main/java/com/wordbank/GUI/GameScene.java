@@ -119,6 +119,7 @@ public class GameScene extends javax.swing.JPanel implements Runnable {
         eventHandler(graphics);
 
         graphics.dispose();
+        System.gc();
     }
 
     @Override

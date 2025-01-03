@@ -80,6 +80,10 @@ public class YamlReader {
         config.turn++;
     }
 
+    public int getTurn() {
+        return config.turn;
+    }
+
     public void updateWords(String[] words) {
         config.words.clear();
         for (final String word : words) {

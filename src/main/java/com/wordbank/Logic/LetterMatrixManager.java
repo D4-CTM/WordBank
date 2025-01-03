@@ -86,6 +86,10 @@ public class LetterMatrixManager {
         return yaml.getWords();
     }
 
+    public int getTurn() {
+        return yaml.getTurn();
+    }
+
     public Letter getLetterAt(int x, int y) {
         return letterMatrix.getLetterAt(x, y);
     }
@@ -105,6 +109,7 @@ public class LetterMatrixManager {
         }
         return wordsFound;
     }
+
 }
 class LetterMatrix implements Serializable {
     public static final short MATRIX_DIMENSION = 12;
@@ -211,7 +216,7 @@ class LetterMatrix implements Serializable {
                     }
                 }
             }
-            //Diagonal left down ->/\
+            //Diagonal left down ->\/
             case 5 -> {
                 if (x + length >= dimension || y - length < 0) {
                     insertWord(word, dimension);
@@ -244,7 +249,7 @@ class LetterMatrix implements Serializable {
                     }
                 }
             }
-            //Diagonal rigth down ->/\
+            //Diagonal rigth down ->\/
             case 7 -> {
                 if (x - length < 0 || y - length < 0) {
                     insertWord(word, dimension);
@@ -310,7 +315,7 @@ class LetterMatrix implements Serializable {
     }
 
 }
-class Letter implements Serializable {
+class Letter implements Cloneable, Serializable {
     private static final long serialVersionUID = 1L;
     //If this space is use for another word
     public boolean spaceTaken;
@@ -323,6 +328,11 @@ class Letter implements Serializable {
         spaceTaken = false;
         found = false;
         word = _word;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }
 class WordCoord implements Serializable{

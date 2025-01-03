@@ -75,6 +75,15 @@ public class GameGraphics {
             graphic.setColor(!wordsFound.contains(word) ? Texts.BORDER_COLOR : Texts.TEXT_COLOR);
             graphic.drawString(word, xOffset, yOffset);
         }
+
+        xOffset = 700;
+        yOffset = 90;
+        graphic.setColor(Texts.TEXT_COLOR);
+        graphic.setFont(Texts.BOLD_FONT);
+        String turn = String.valueOf(letterMatrix.getTurn());
+
+        xOffset -= turn.length()/2 * 25;
+        graphic.drawString(turn, xOffset, yOffset);
     }
 
     public void renderMatrixBackground(Graphics2D graphic) {
